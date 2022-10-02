@@ -1,0 +1,42 @@
+version: "3.8"
+
+services:
+  mysql:
+    image: mysql:8.0
+    container_name: bank-mysql
+    environment:
+      MYSQL_ROOT_PASSWORD: root
+      MYSQL_DATABASE: bank_db
+    ports:
+      - "3306:3306"
+    volumes:
+      - ./scripts/setup-db.sql:/docker-entrypoint-initdb.d/01-setup.sql
+      - ./scripts/init-data.sql:/docker-entrypoint-initdb.d/02-data.sql
+      - mysql_data:/var/lib/mysql
+    networks:
+      - bank-network
+    healthcheck:
+      test: ["CMD", "mysqladmin", "ping", "-h", "localhost"]
+      timeout: 20s
+      retries: 10
+
+  phpmyadmin:
+    image: phpmyadmin:latest
+    container_name: bank-phpmyadmin
+    environment:
+      PMA_HOST: mysql
+      PMA_USER: root
+      PMA_PASSWORD: root
+    ports:
+      - "8081:80"
+    networks:
+      - bank-network
+    depends_on:
+      - mysql
+
+volumes:
+  mysql_data:
+
+networks:
+  bank-network:
+    driver: bridge

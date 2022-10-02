@@ -1,0 +1,27 @@
+# Maven build artifacts
+target/
+.m2/
+
+# IDE
+.idea/
+.vscode/
+*.iml
+*.iws
+*.ipr
+
+# OS
+.DS_Store
+Thumbs.db
+
+# Logs
+logs/
+*.log
+
+# Environment
+.env
+.env.local
+
+# Build
+*.jar
+*.war
+*.zip
